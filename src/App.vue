@@ -1,6 +1,8 @@
 <template>
-  <Header title="Task Tracker"></Header>
-  <Tasks :tasks="tasks" />
+  <div class="container">
+    <Header title="Task Tracker"></Header>
+    <Tasks :tasks="tasks"/>
+  </div>
 </template>
 
 <script>
