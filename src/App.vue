@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Header title="Task Tracker"></Header>
-    <AddTask />
+    <AddTask @add-task="addTask"/>
     <Tasks
         :tasks="tasks"
         @delete-task="deleteTask"
@@ -35,6 +35,10 @@ export default {
       this.tasks = this.tasks.map(task => {
         return task.id === id ? { ...task, reminder: !task.reminder } : task;
       })
+    },
+
+    addTask(task) {
+      this.tasks.push(task);
     }
   },
 

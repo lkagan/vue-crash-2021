@@ -1,5 +1,5 @@
 <template>
-  <form class="add-form">
+  <form @submit.prevent="onSubmit" class="add-form">
     <div class="form-control">
       <label>Task</label>
       <input
@@ -39,6 +39,26 @@ export default {
       text: '',
       day: '',
       reminder: false
+    }
+  },
+
+  methods: {
+    onSubmit() {
+      if (!this.text) {
+        return alert('Please add a task')
+      }
+
+      const newTask = {
+        id: Math.floor(Math.random() * 1000000),
+        text: this.text,
+        day: this.day,
+        reminder: this.reminder
+      }
+
+      this.text = this.day = '';
+      this.reminder = false;
+
+      this.$emit('add-task', newTask)
     }
   }
 }
