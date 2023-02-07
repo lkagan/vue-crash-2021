@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Header title="Task Tracker"></Header>
-    <Tasks :tasks="tasks"/>
+    <Tasks :tasks="tasks" @delete-task="deleteTask" />
   </div>
 </template>
 
@@ -18,6 +18,12 @@ export default {
     }
   },
 
+  methods: {
+    deleteTask(id) {
+      this.tasks = this.tasks.filter(task => task.id != id);
+    }
+  },
+
   created() {
     this.tasks = [
       {
@@ -25,6 +31,18 @@ export default {
         text: 'Doctors Appointment',
         day: 'March 1st at 2:30pm',
         reminder: true
+      },
+      {
+        id: 2,
+        text: 'Meeting at School',
+        day: 'March 3rd at 1:30pm',
+        reminder: true
+      },
+      {
+        id: 3,
+        text: 'Food Shopping',
+        day: 'March 3rd at 11:00am',
+        reminder: false
       }
     ]
   },
