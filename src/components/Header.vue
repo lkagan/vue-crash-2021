@@ -2,9 +2,9 @@
   <header>
     <h1>{{ title }}</h1>
     <Button
-        @click="onClick"
-        text="Add Task"
-        color="green"
+        @btnClick="$emit('on-click-add-task')"
+        :text="showAddTask ? 'Close' : 'Add Task'"
+        :color="showAddTask ? 'red' : 'green'"
     ></Button>
   </header>
 </template>
@@ -20,14 +20,9 @@ export default {
   },
 
   props: {
-    title: String
+    title: String,
+    showAddTask: Boolean,
   },
-
-  methods: {
-    onClick() {
-      console.log('click');
-    }
-  }
 }
 </script>
 
