@@ -44,32 +44,32 @@ export default {
       })
     },
 
-    addTask(task) {
-      this.tasks.push(task);
+    async addTask(task) {
+      return await fetch('api/tasks', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(task)
+      })
+          .then((res) => res.json())
+          .then(task => this.tasks.push(task));
+    },
+
+    async fetchTasks() {
+      return await fetch('api/tasks')
+          .then(res => res.json());
+    },
+
+    async fetchTask(id) {
+      return await fetch(`api/tasks/${id}`)
+          .then(res => res.json());
+
     }
   },
 
-  created() {
-    this.tasks = [
-      {
-        id: 1,
-        text: 'Doctors Appointment',
-        day: 'March 1st at 2:30pm',
-        reminder: true
-      },
-      {
-        id: 2,
-        text: 'Meeting at School',
-        day: 'March 3rd at 1:30pm',
-        reminder: true
-      },
-      {
-        id: 3,
-        text: 'Food Shopping',
-        day: 'March 3rd at 11:00am',
-        reminder: false
-      }
-    ]
+  async created() {
+    this.tasks = await this.fetchTasks();
   },
 
   components: {
