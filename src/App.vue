@@ -50,10 +50,23 @@ export default {
       }
     },
 
-    toggleReminder(id) {
-      this.tasks = this.tasks.map(task => {
-        return task.id === id ? { ...task, reminder: !task.reminder } : task;
+    async toggleReminder(id) {
+      const task = await this.fetchTask(id);
+      task.reminder = !task.reminder
+
+      fetch(`/api/tasks/${ id }`, {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(task),
       })
+          .then(res => res.json())
+          .then(updatedTask => {
+            this.tasks = this.tasks.map(task => {
+              return task.id === id ? updatedTask : task;
+            })
+          });
     },
 
     async addTask(task) {
