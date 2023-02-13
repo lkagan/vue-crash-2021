@@ -6,7 +6,7 @@
         :showAddTask=showAddTask
     ></Header>
     <div v-if="showAddTask">
-      <AddTask @add-task="addTask" />
+      <AddTask @add-task="addTask"/>
     </div>
     <Tasks
         :tasks="tasks"
@@ -32,9 +32,21 @@ export default {
   },
 
   methods: {
-    deleteTask(id) {
+    async deleteTask(id) {
       if (confirm('Are you sure?')) {
-        this.tasks = this.tasks.filter(task => task.id != id);
+        await fetch(`/api/tasks/${ id }`, {
+          method: 'DELETE',
+          headers: {
+            'content-type': 'application/json',
+          }
+        })
+            .then((res) => {
+              if (res.ok) {
+                this.tasks = this.tasks.filter(task => task.id != id);
+              } else {
+                alert('Delete failed');
+              }
+            })
       }
     },
 
@@ -62,7 +74,7 @@ export default {
     },
 
     async fetchTask(id) {
-      return await fetch(`api/tasks/${id}`)
+      return await fetch(`api/tasks/${ id }`)
           .then(res => res.json());
 
     }
