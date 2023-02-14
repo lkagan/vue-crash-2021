@@ -14,6 +14,7 @@
         @toggle-reminder="toggleReminder"
     />
     <Footer />
+    <router-view />
   </div>
 </template>
 
