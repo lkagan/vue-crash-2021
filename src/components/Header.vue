@@ -5,6 +5,7 @@
         @btnClick="$emit('on-click-add-task')"
         :text="showAddTask ? 'Close' : 'Add Task'"
         :color="showAddTask ? 'red' : 'green'"
+        v-show="homePage"
     ></Button>
   </header>
 </template>
@@ -23,6 +24,12 @@ export default {
     title: String,
     showAddTask: Boolean,
   },
+
+  computed: {
+    homePage() {
+      return this.$route.path === '/';
+    }
+  }
 }
 </script>
 
