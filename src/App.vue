@@ -5,23 +5,13 @@
         @on-click-add-task="showAddTask = !showAddTask"
         :showAddTask=showAddTask
     ></Header>
-    <div v-if="showAddTask">
-      <AddTask @add-task="addTask"/>
-    </div>
-    <Tasks
-        :tasks="tasks"
-        @delete-task="deleteTask"
-        @toggle-reminder="toggleReminder"
-    />
+    <router-view :showAddTask="showAddTask" />
     <Footer />
-    <router-view />
   </div>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
-import Tasks from "@/components/Tasks.vue";
-import AddTask from "@/components/AddTask.vue";
 import Footer from "@/components/Footer.vue";
 
 export default {
@@ -29,81 +19,12 @@ export default {
 
   data() {
     return {
-      tasks: [],
       showAddTask: false
     }
   },
 
-  methods: {
-    async deleteTask(id) {
-      if (confirm('Are you sure?')) {
-        await fetch(`/api/tasks/${ id }`, {
-          method: 'DELETE',
-          headers: {
-            'content-type': 'application/json',
-          }
-        })
-            .then((res) => {
-              if (res.ok) {
-                this.tasks = this.tasks.filter(task => task.id != id);
-              } else {
-                alert('Delete failed');
-              }
-            })
-      }
-    },
-
-    async toggleReminder(id) {
-      const task = await this.fetchTask(id);
-      task.reminder = !task.reminder
-
-      fetch(`/api/tasks/${ id }`, {
-        method: 'PUT',
-        headers: {
-          'content-type': 'application/json'
-        },
-        body: JSON.stringify(task),
-      })
-          .then(res => res.json())
-          .then(updatedTask => {
-            this.tasks = this.tasks.map(task => {
-              return task.id === id ? updatedTask : task;
-            })
-          });
-    },
-
-    async addTask(task) {
-      return await fetch('api/tasks', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(task)
-      })
-          .then((res) => res.json())
-          .then(task => this.tasks.push(task));
-    },
-
-    async fetchTasks() {
-      return await fetch('api/tasks')
-          .then(res => res.json());
-    },
-
-    async fetchTask(id) {
-      return await fetch(`api/tasks/${ id }`)
-          .then(res => res.json());
-
-    }
-  },
-
-  async created() {
-    this.tasks = await this.fetchTasks();
-  },
-
   components: {
     Footer,
-    AddTask,
-    Tasks,
     Header
   }
 }
